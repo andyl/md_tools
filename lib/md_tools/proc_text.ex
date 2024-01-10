@@ -1,7 +1,14 @@
-defmodule MdTools.Proc do
+defmodule MdTools.ProcText do
+
+  def ingest(text, args \\ %{}) do
+    text
+    |> String.split("\n")
+    |> Enum.reduce(new_doc(args), &proc_line/2)
+    |> to_list()
+  end
 
   def new_doc(args \\ %{}) do
-    %{filename: "", line_count: 1, doc_title: "", sections: []}
+    %{filepath: "", line_count: 1, doc_title: "", sections: []}
     |> Map.merge(args)
   end
 
@@ -11,7 +18,7 @@ defmodule MdTools.Proc do
 
   def to_list(data) do
     merge_data = %{
-      filename: data.filename,
+      filepath: data.filepath,
       doc_title: data.doc_title
     }
     data.sections
@@ -104,7 +111,7 @@ defmodule MdTools.Proc do
     |> Map.merge(%{line_count: current + 1})
   end
 
-  # defp set_filename(data, filename) do
+  # defp set_filepath(data, filepath) do
   # end
 
   defp add_section(data) do
