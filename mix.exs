@@ -19,6 +19,11 @@ defmodule MdTools.MixProject do
 
   defp deps do
     [
+      # for restful search server
+      {:bandit, "~> 1.0"},
+      # for file watcher / reloader
+      {:file_system, "~> 0.2"},
+      # sqlite integration
       {:exqlite, "~> 0.17"}
     ]
   end
