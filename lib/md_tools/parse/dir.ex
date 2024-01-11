@@ -1,8 +1,8 @@
-defmodule MdTools.Chunk.Dir do
-  @moduledoc "Chunk a directory of markdown files."
+defmodule MdTools.Parse.Dir do
+  @moduledoc "Parse a directory of markdown files."
 
   @doc """
-  Ingest a directory of markdown files.
+  Parse a directory of markdown files.
 
   Each file contains a document.
 
@@ -18,7 +18,7 @@ defmodule MdTools.Chunk.Dir do
   defp process_file(file) do
     file
     |> File.read!()
-    |> MdTools.Chunk.Doc.ingest(%{filepath: file})
+    |> MdTools.Parse.Doc.ingest(%{filepath: file})
   end
 
   defp list_all_files(base_path) do

@@ -1,4 +1,4 @@
-defmodule MdTools.Fts.Db do
+defmodule MdTools.Db do
   @moduledoc "Sqlite full-text-search operations."
 
   alias Exqlite.Sqlite3

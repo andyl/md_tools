@@ -1,4 +1,4 @@
-defmodule MdTools.TestData do
+defmodule MdTools.Test.Data do
   def set1 do
     """
     # TestData Set1

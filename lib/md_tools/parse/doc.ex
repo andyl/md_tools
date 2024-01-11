@@ -1,4 +1,4 @@
-defmodule MdTools.Chunk.Doc do
+defmodule MdTools.Parse.Doc do
 
   @moduledoc "Chunk a markdown document."
 

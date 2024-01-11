@@ -13,18 +13,16 @@ defmodule MdTools.MixProject do
 
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: [:observer, :wx, :logger],
+      mod: {MdTools.Application, []}
     ]
   end
 
   defp deps do
     [
-      # for restful search server
       {:bandit, "~> 1.0"},
-      # for file watcher / reloader
-      {:file_system, "~> 0.2"},
-      # sqlite integration
-      {:exqlite, "~> 0.17"}
+      {:exqlite, "~> 0.17"},
+      {:file_system, "~> 0.2"}
     ]
   end
 end

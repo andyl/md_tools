@@ -1,8 +1,8 @@
 defmodule Mix.Tasks.Test6 do
   use Mix.Task
 
-  alias MdTools.Chunk.Dir
-  alias MdTools.Fts.Db
+  alias MdTools.Parse.Dir
+  alias MdTools.Db
 
   def run(_) do
     data = "/home/aleak/util/org"
@@ -10,7 +10,6 @@ defmodule Mix.Tasks.Test6 do
     |> List.flatten()
 
     db = Db.open(":memory:")
-
     Db.load(db, data)
 
     Db.search(db, "Plasma")

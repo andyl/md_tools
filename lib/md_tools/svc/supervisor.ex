@@ -1,4 +1,4 @@
-defmodule MdTools.Fts.ServerSupervisor do
+defmodule MdTools.Svc.Supervisor do
 
   @moduledoc false
 
@@ -12,8 +12,10 @@ defmodule MdTools.Fts.ServerSupervisor do
   def init(_init_arg) do
     if Application.get_env(:md_tools, :fts_server) do
       children = [
-        # WebDevUtils.FileSystem,
-        MdTools.Fts.Server,
+        {MdTools.Svc.Watcher, [dirs: ["/home/aleak/util/org"]]},
+        MdTools.Svc.Indexer,
+        MdTools.Svc.Manager,
+        MdTools.Svc.Httpd.Server,
       ]
 
       Supervisor.init(children, strategy: :one_for_one)

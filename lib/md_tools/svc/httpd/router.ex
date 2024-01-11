@@ -1,7 +1,7 @@
-defmodule MdTools.Fts.Router do
+defmodule MdTools.Svc.Httpd.Router do
   @moduledoc false
 
-  use Plug.Router
+  use Plug.Router, init_mode: :runtime
 
   require Logger
 
@@ -9,12 +9,10 @@ defmodule MdTools.Fts.Router do
   plug(:dispatch)
 
   get "/" do
-    IO.puts("BASE1")
     send_resp(conn, 200, ":ok")
   end
 
   get "/query" do
-    IO.puts("BASE2")
     send_resp(conn, 200, ":query")
   end
 
