@@ -2,11 +2,11 @@ defmodule Mix.Tasks.Test1 do
 
   use Mix.Task
 
-  alias MdTools.ProcText
+  alias MdTools.Chunk.Doc
 
   def run(_) do
     MdTools.TestData.set1()
-    |> ProcText.ingest()
+    |> Doc.ingest()
     |> IO.inspect()
   end
 end

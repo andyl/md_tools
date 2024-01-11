@@ -1,8 +1,6 @@
 defmodule Mix.Tasks.Test2 do
   use Mix.Task
 
-  # alias MdTools.Proc
-
   def run(_) do
     base_path()
     |> list_all_files()

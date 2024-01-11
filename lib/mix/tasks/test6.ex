@@ -1,12 +1,12 @@
 defmodule Mix.Tasks.Test6 do
   use Mix.Task
 
-  alias MdTools.ProcDir
-  alias MdTools.Db
+  alias MdTools.Chunk.Dir
+  alias MdTools.Fts.Db
 
   def run(_) do
     data = "/home/aleak/util/org"
-    |> ProcDir.ingest()
+    |> Dir.ingest()
     |> List.flatten()
 
     db = Db.open(":memory:")
