@@ -22,12 +22,18 @@ defmodule MdTools.Svc.Watcher do
   # ----- Callbacks
 
   def handle_info({:file_event, _pid, {path, [:modified, :closed]}}, state) do
-    if String.ends_with?(path, ".md"), do: Indexer.rebuild()
+    if String.ends_with?(path, ".md") do
+      IO.puts("Modified: #{path}")
+      Indexer.rebuild()
+    end
     {:noreply, state}
   end
 
   def handle_info({:file_event, _pid, {path, [:deleted]}}, state) do
-    if String.ends_with?(path, ".md"), do: Indexer.rebuild()
+    if String.ends_with?(path, ".md") do
+      IO.puts("Deleted: #{path}")
+      Indexer.rebuild()
+    end
     {:noreply, state}
   end
 
