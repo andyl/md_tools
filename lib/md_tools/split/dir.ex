@@ -1,4 +1,4 @@
-defmodule MdTools.Parse.Dir do
+defmodule MdTools.Split.Dir do
   @moduledoc "Parse a directory of markdown files."
 
   @doc """
@@ -18,7 +18,7 @@ defmodule MdTools.Parse.Dir do
   defp process_file(file) do
     file
     |> File.read!()
-    |> MdTools.Parse.Doc.ingest(%{filepath: file})
+    |> MdTools.Split.Doc.ingest(%{filepath: file})
   end
 
   defp list_all_files(base_path) do

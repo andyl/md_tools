@@ -2,7 +2,7 @@ defmodule Mix.Tasks.Test1 do
 
   use Mix.Task
 
-  alias MdTools.Parse.Doc
+  alias MdTools.Split.Doc
 
   def run(_) do
     MdTools.Test.Data.set1()

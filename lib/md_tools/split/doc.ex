@@ -1,4 +1,4 @@
-defmodule MdTools.Parse.Doc do
+defmodule MdTools.Split.Doc do
 
   @moduledoc "Chunk a markdown document."
 

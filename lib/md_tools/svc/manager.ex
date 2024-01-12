@@ -3,7 +3,7 @@ defmodule MdTools.Svc.Manager do
 
   use GenServer
 
-  alias MdTools.Parse.Dir
+  alias MdTools.Split.Dir
   alias MdTools.Db
 
   # ----- API

@@ -1,7 +1,7 @@
 defmodule Mix.Tasks.Test6 do
   use Mix.Task
 
-  alias MdTools.Parse.Dir
+  alias MdTools.Split.Dir
   alias MdTools.Db
 
   def run(_) do
