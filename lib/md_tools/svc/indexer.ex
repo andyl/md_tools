@@ -42,7 +42,7 @@ defmodule MdTools.Svc.Indexer do
       Process.send_after(self(), :reopen, @delay + 1000)
       {:reply, :ok, {last_call_time, :closed}}
     else
-      # EXECUTE_REBUILD
+      exec_rebuild()
       {:reply, :ok, {current_time, :open}}
     end
   end
@@ -52,7 +52,7 @@ defmodule MdTools.Svc.Indexer do
   end
 
   def handle_info(:reopen, _state) do
-    # EXECUTE_REBUILD
+    exec_rebuild()
     {:noreply, {time_now(), :open}}
   end
 
@@ -61,6 +61,11 @@ defmodule MdTools.Svc.Indexer do
   @doc false
   def reopen do
     GenServer.call(__MODULE__, :reopen)
+  end
+
+  defp exec_rebuild do
+    IO.puts("Rebuilding Index")
+    MdTools.Svc.Manager.reload()
   end
 
   defp time_now() do
