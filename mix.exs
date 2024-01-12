@@ -20,9 +20,10 @@ defmodule MdTools.MixProject do
 
   defp deps do
     [
+      {:jason, "~> 1.4"},
       {:bandit, "~> 1.0"},
       {:exqlite, "~> 0.17"},
-      {:file_system, "~> 0.2"}
+      {:file_system, "~> 1.0"}
     ]
   end
 end
