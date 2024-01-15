@@ -1,6 +1,10 @@
 # MdTools
 
-**TODO: Add description**
+Markdown Processing MdTools
+
+- splitter - split markdown documents into chunks based on section delimeters 
+- FTS (Full Text Search) indexer, file watcher and restful JSON api 
+- VSS (Vector Similarity Search) indexer, file watcher and restful JSON api  
 
 ## Installation
 
