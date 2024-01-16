@@ -20,10 +20,15 @@ defmodule MdTools.MixProject do
 
   defp deps do
     [
+      # ----- basics
       {:jason, "~> 1.4"},
       {:bandit, "~> 1.0"},
-      {:exqlite, "~> 0.17"},
-      {:file_system, "~> 1.0"}
+      {:exqlite, "~> 0.18"},
+      {:file_system, "~> 1.0"},
+      # ----- tensor operations
+      {:nx, "~> 0.6"},
+      {:exla, "~> 0.6"},
+      {:bumblebee, "~> 0.4"}
     ]
   end
 end
