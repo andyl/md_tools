@@ -17,7 +17,7 @@ defmodule MdTools.Fts.Db do
 
   def migrate(conn) do
     cmd =
-      "CREATE VIRTUAL TABLE IF NOT EXISTS sections USING fts5(filepath, doctitle, sectitle, body, start_line);"
+      "CREATE VIRTUAL TABLE IF NOT EXISTS sections USING fts5(filepath, doctitle, sectitle, body, startline);"
 
     {:ok, statement} = Sqlite3.prepare(conn, cmd)
     :done = Sqlite3.step(conn, statement)
@@ -40,7 +40,7 @@ defmodule MdTools.Fts.Db do
     values = gen_values(data)
 
     cmd =
-      "INSERT INTO sections (filepath, doctitle, sectitle, body, start_line) VALUES (#{values});"
+      "INSERT INTO sections (filepath, doctitle, sectitle, body, startline) VALUES (#{values});"
 
     statement =
       case Sqlite3.prepare(conn, cmd) do
@@ -60,7 +60,7 @@ defmodule MdTools.Fts.Db do
   def gen_values(data) do
     cleanbody = data.body |> String.replace("'", "")
 
-    ~s{'#{data.filepath}', '#{data.doc_title}', '#{data.section_title}', '#{cleanbody}', '#{data.start_line}'}
+    [data.filepath, data.doc_title, data.section_title, cleanbody, data.startline]
   end
 
   def search(conn, query) do
