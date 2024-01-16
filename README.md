@@ -22,7 +22,7 @@ Schema:
 
 Schema: 
 - filepath, doctitle, sectitle, body, start_line
-- v_filepathv, v_doctitle, v_sectitle, v_body
+- v_filepath, v_doctitle, v_sectitle, v_body
 
 ## Installation
 
