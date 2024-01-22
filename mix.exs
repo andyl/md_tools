@@ -28,7 +28,10 @@ defmodule MdTools.MixProject do
       # ----- tensor operations
       {:nx, "~> 0.6"},
       {:exla, "~> 0.6"},
-      {:bumblebee, "~> 0.4"}
+      {:bumblebee, "~> 0.4"},
+      # ----- testing
+      # {:mix_test_interactive, "~> 1.2", only: :dev, runtime: false}
+      {:mix_test_interactive, path: "~/src/Forks/mix_test_interactive", only: :dev, runtime: false}
     ]
   end
 end
