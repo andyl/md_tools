@@ -3,7 +3,7 @@ defmodule Mix.Tasks.Test.T4 do
 
   def run(_) do
     "/home/aleak/util/org"
-    |> MdTools.Split.Dir.ingest()
+    |> MdTools.Docs.Dir.ingest()
     |> IO.inspect()
   end
 end

@@ -1,7 +1,7 @@
 defmodule Mix.Tasks.Test.T7 do
   use Mix.Task
 
-  alias MdTools.Split.Dir
+  alias MdTools.Docs.Dir
   alias MdTools.Vss.Db
 
   def run(_) do
