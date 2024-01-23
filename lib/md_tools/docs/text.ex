@@ -11,6 +11,8 @@ defmodule MdTools.Docs.Text do
   - startline
   - uuid
   - updated
+  - filehash
+  - bodyhash
   """
 
   @doc """
@@ -18,11 +20,14 @@ defmodule MdTools.Docs.Text do
 
   Documents are chunked on sections denoted by the H2 `##` delimeter.
   """
-  def ingest(text, args \\ %{}) do
+  def ingest(text, iargs \\ %{}) do
+    args = Map.merge(iargs, %{filehash: genhash(text)})
+
     text
     |> String.split("\n")
     |> Enum.reduce(new_doc(args), &proc_line/2)
     |> to_list()
+    |> Enum.map(&Map.merge(&1, %{bodyhash: genhash(&1.body)}))
   end
 
   defp new_doc(args) do
@@ -37,6 +42,7 @@ defmodule MdTools.Docs.Text do
   defp to_list(data) do
     merge_data = %{
       filepath: data.filepath,
+      filehash: data.filehash,
       doc_title: data.doc_title
     }
     data.sections
@@ -56,6 +62,7 @@ defmodule MdTools.Docs.Text do
     proc_line(line, data, has_section_title?(line))
   end
 
+  # has section title
   defp proc_line(line, data, true) do
     data
     |> increment_line_count()
@@ -65,6 +72,7 @@ defmodule MdTools.Docs.Text do
     |> append_body(line)
   end
 
+  # does not have section title
   defp proc_line(line, data, false) do
     data
     |> increment_line_count()
@@ -163,6 +171,12 @@ defmodule MdTools.Docs.Text do
     {first, [last]} = split_sections(data)
     newlast = Map.merge(last, newmap)
     Map.merge(data, %{sections: first ++ [newlast]})
+  end
+
+  defp genhash(text) do
+    :crypto.hash(:md5, text)
+    |> Base.encode16(case: :lower)
+    |> String.slice(-6, 6)
   end
 end
 
