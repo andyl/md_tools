@@ -15,6 +15,8 @@ defmodule MdTools.Docs.Text do
   - bodyhash
   """
 
+  alias Uniq.UUID
+
   @doc """
   Ingest a markdown document.
 
@@ -27,7 +29,16 @@ defmodule MdTools.Docs.Text do
     |> String.split("\n")
     |> Enum.reduce(new_doc(args), &proc_line/2)
     |> to_list()
-    |> Enum.map(&Map.merge(&1, %{bodyhash: genhash(&1.body)}))
+    |> Enum.map(&sec_merge(&1))
+  end
+
+  defp sec_merge(map) do
+    data = %{
+      bodyhash: map.body |> genhash(),
+      uuid: uuid(),
+      updated: timestamp()
+    }
+    Map.merge(map, data)
   end
 
   defp new_doc(args) do
@@ -177,6 +188,14 @@ defmodule MdTools.Docs.Text do
     :crypto.hash(:md5, text)
     |> Base.encode16(case: :lower)
     |> String.slice(-6, 6)
+  end
+
+  defp uuid do
+    UUID.uuid7(:slug)
+  end
+
+  defp timestamp do
+    DateTime.utc_now() |> Calendar.strftime("%y%m%d%H%M%S")
   end
 end
 
