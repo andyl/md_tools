@@ -25,6 +25,7 @@ defmodule MdTools.MixProject do
       {:bandit, "~> 1.0"},
       {:exqlite, "~> 0.18"},
       {:file_system, "~> 1.0"},
+      {:uniq, "~> 0.6"},
       # ----- tensor operations
       {:nx, "~> 0.6"},
       {:exla, "~> 0.6"},
