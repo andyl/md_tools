@@ -3,7 +3,7 @@ defmodule Mix.Tasks.Test.T3 do
 
   def run(_) do
     base_path()
-    |> MdTools.Docs.Dir.ingest()
+    # |> MdTools.Docs.Dir.ingest()
     |> IO.inspect()
   end
 

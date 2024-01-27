@@ -1,7 +1,7 @@
 defmodule Mix.Tasks.Test.T8 do
   use Mix.Task
 
-  alias MdTools.Docs.Dir
+  # alias MdTools.Docs.Dir
   alias MdTools.Vss.Db
 
   def run(_) do
@@ -11,7 +11,7 @@ defmodule Mix.Tasks.Test.T8 do
     Mix.Task.run("app.start", ["--preload-modules"])
 
     data = "/home/aleak/util/org"
-    |> Dir.ingest()
+    # |> Dir.ingest()
     |> List.flatten()
 
     data1 = data |> Enum.take(1) |> IO.inspect()
