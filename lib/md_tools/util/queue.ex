@@ -1,5 +1,9 @@
 defmodule MdTools.Util.Queue do
 
+  def new do
+    :queue.new()
+  end
+
   def from_list(list) do
     :queue.from_list(list)
   end
@@ -17,6 +21,18 @@ defmodule MdTools.Util.Queue do
     {head, tail}
   end
 
+  def pop(queue, count) when is_number(count) do
+    do_pop([], queue, count, len(queue))
+  end
+
+  defp do_pop(head, tail, 0, _), do: {head, tail}
+  defp do_pop(head, tail, _, 0), do: {head, tail}
+
+  defp do_pop(head, tail, count, _len) do
+    {new_head, new_tail} = pop(tail)
+    do_pop(head ++ [new_head], new_tail, count - 1, len(new_tail))
+  end
+
   def peek(queue) do
     {:value, head} = :queue.peek(queue)
     head
@@ -30,7 +46,7 @@ defmodule MdTools.Util.Queue do
     ! :queue.is_empty(queue)
   end
 
-  def length(queue) do
+  def len(queue) do
     :queue.len(queue)
   end
 

@@ -29,9 +29,42 @@ defmodule MdTools.Util.QueueTest do
   end
 
   describe "#pop/1" do
-    test "removes a item from the head" do
-      {head, _tail}  = [1,2,3] |> Queue.from_list() |> Queue.pop()
+    test "removes a item from the queue" do
+      {head, tail}  = [1,2,3] |> Queue.from_list() |> Queue.pop()
+      assert Queue.len(tail) == 2
       assert head == 1
+    end
+  end
+
+  describe "#pop/2" do
+    test "removes zero item from the queue" do
+      {head, tail}  = [1,2,3] |> Queue.from_list() |> Queue.pop(0)
+      assert Queue.len(tail) == 3
+      assert head == []
+    end
+
+    test "removes one item from the queue" do
+      {head, tail}  = [1,2,3] |> Queue.from_list() |> Queue.pop(1)
+      assert Queue.len(tail) == 2
+      assert head == [1]
+    end
+
+    test "removes two item from the queue" do
+      {head, tail}  = [1,2,3] |> Queue.from_list() |> Queue.pop(2)
+      assert Queue.len(tail) == 1
+      assert head == [1, 2]
+    end
+
+    test "removes three item from the queue" do
+      {head, tail}  = [1,2,3] |> Queue.from_list() |> Queue.pop(3)
+      assert Queue.len(tail) == 0
+      assert head == [1, 2, 3]
+    end
+
+    test "removes five item from the queue" do
+      {head, tail}  = [1,2,3] |> Queue.from_list() |> Queue.pop(5)
+      assert Queue.len(tail) == 0
+      assert head == [1, 2, 3]
     end
   end
 
@@ -62,14 +95,14 @@ defmodule MdTools.Util.QueueTest do
     end
   end
 
-  describe "#length/1" do
+  describe "#len/1" do
     test "empty queue" do
-      result = [] |> Queue.from_list() |> Queue.length()
+      result = [] |> Queue.from_list() |> Queue.len()
       assert result == 0
     end
 
     test "non-empty queue" do
-      result = [1,2,3] |> Queue.from_list() |> Queue.length()
+      result = [1,2,3] |> Queue.from_list() |> Queue.len()
       assert result == 3
     end
   end
