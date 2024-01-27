@@ -20,6 +20,18 @@ FTS Fields: filepath, startline, doctitle, sectitle, body, uuid, updated
 
 VSS Fields: v_filepath, v_doctitle, v_sectitle, v_body, uuid
 
+## Overview 
+
+```
+~/util/org 
+-> org/watcher(text-gen) 
+--> ~/util/org/.md_tools/data.ndjson 
+---> watcher(vector-gen)
+----> ~/util/org/.md_tools/data.parquet 
+-----> watcher(db-load)
+
+```
+
 ## Installation
 
 ```elixir
