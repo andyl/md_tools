@@ -18,3 +18,7 @@ System.put_env([
   TF_CPP_MIN_LOG_LEVEL: 3]
 )
 
+if Mix.env == :dev do
+  config :mix_test_interactive, clear: true
+end
+
