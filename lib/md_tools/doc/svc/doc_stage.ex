@@ -1,12 +1,9 @@
-defmodule MdTools.Doc.Svc.Stage do
+defmodule MdTools.Doc.Svc.DocStage do
+
   use GenStage
 
   @moduledoc """
-  Stage for ingesting documents.
-
-  This is a GenStage producer.
-
-  The service maintains a list of document
+  DocStage for ingesting documents - a GenStage producer.
   """
 
   @base_dir "/home/aleak/util/org"
@@ -20,7 +17,7 @@ defmodule MdTools.Doc.Svc.Stage do
   # ----- startup
 
   @doc """
-  Start the Stage server.
+  Start the DocStage server
   """
   def start_link(options \\ []) when is_list(options) do
     defaults = [base_dir: @base_dir, event_queue: Queue.new()]
