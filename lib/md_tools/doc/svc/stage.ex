@@ -1,4 +1,4 @@
-defmodule MdTools.Doc.Svc.DocStage do
+defmodule MdTools.Doc.Svc.Stage do
   use GenStage
 
   @moduledoc """
@@ -20,7 +20,7 @@ defmodule MdTools.Doc.Svc.DocStage do
   # ----- startup
 
   @doc """
-  Start the DocStage server.
+  Start the Stage server.
   """
   def start_link(options \\ []) when is_list(options) do
     defaults = [base_dir: @base_dir, event_queue: Queue.new()]

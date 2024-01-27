@@ -1,8 +1,10 @@
-defmodule MdTools.Doc.Svc.DocWatcher do
+defmodule MdTools.Doc.Svc.Watcher do
 
   use GenServer
 
   alias MdTools.Util
+  alias MdTools.Doc.Svc.Stage
+
 
   @moduledoc """
   Watch the filesystem for changes.
@@ -19,7 +21,7 @@ defmodule MdTools.Doc.Svc.DocWatcher do
 
   @doc false
   def init(options) do
-    args = [dirs: [options[:basepath]]]
+    args = [dirs: [options[:base_dir]]]
     Util.IO.puts("Starting DOC Watcher (#{inspect(args)})")
     {:ok, watcher_pid} = FileSystem.start_link(args)
     FileSystem.subscribe(watcher_pid)
@@ -31,7 +33,7 @@ defmodule MdTools.Doc.Svc.DocWatcher do
   def handle_info({:file_event, _pid, {path, [:modified, :closed]}}, state) do
     if String.ends_with?(path, ".md") do
       IO.puts("Modified: #{path}")
-      MdTools.Doc.Svc.DocStage.upsert_file(path)
+      Stage.upsert_file(path)
     end
     {:noreply, state}
   end
@@ -39,7 +41,7 @@ defmodule MdTools.Doc.Svc.DocWatcher do
   def handle_info({:file_event, _pid, {path, [:deleted]}}, state) do
     if String.ends_with?(path, ".md") do
       IO.puts("Deleted: #{path}")
-      MdTools.Doc.Svc.DocStage.delete_file(path)
+      Stage.delete_file(path)
     end
     {:noreply, state}
   end
