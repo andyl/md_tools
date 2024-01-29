@@ -10,7 +10,7 @@ defmodule MdTools.Doc.File do
   def ingest(filepath, args \\ %{}) do
     filepath
     |> File.read!()
-    |> MdTools.Doc.Text.ingest(Map.merge(args, %{filepath: filepath}))
+    |> MdTools.Doc.Section.ingest(Map.merge(args, %{filepath: filepath}))
   end
 end
 
