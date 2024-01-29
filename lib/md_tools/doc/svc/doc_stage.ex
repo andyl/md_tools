@@ -6,7 +6,6 @@ defmodule MdTools.Doc.Svc.DocStage do
   DocStage for ingesting documents - a GenStage producer.
   """
 
-  @base_dir "/home/aleak/util/org"
   @procname :doc_stage
 
   alias MdTools.Util.File
@@ -20,17 +19,13 @@ defmodule MdTools.Doc.Svc.DocStage do
   Start the DocStage server
   """
   def start_link(options \\ []) when is_list(options) do
-    defaults = [base_dir: @base_dir, event_queue: Queue.new()]
-    opts = Keyword.merge(defaults, options) |> Enum.into(%{})
-    GenStage.start_link(__MODULE__, opts, name: @procname)
+    GenStage.start_link(__MODULE__, options, name: @procname)
   end
 
   @doc false
   @impl true
-  def init(state) do
-    queue = state.base_dir |> File.markdown_events() |> Queue.from_list()
-
-    {:producer, assign(state, :event_queue, queue)}
+  def init(options) do
+    {:producer, init_state(options)}
   end
 
   # ----- api
@@ -100,6 +95,19 @@ defmodule MdTools.Doc.Svc.DocStage do
   end
 
   # ----- helpers
+
+  def default_state do
+    %{
+      base_dir: "/home/aleak/util/org",
+      event_queue: Queue.new(),
+    }
+  end
+
+  def init_state(options) do
+    state = default_state() |> Map.merge(Enum.into(options, %{}))
+    queue = state.base_dir |> File.markdown_events() |> Queue.from_list()
+    state |> assign(:event_queue, queue)
+  end
 
   defp append_queue(queue, action, path) do
     event = {action, path, File.mtime(path)}

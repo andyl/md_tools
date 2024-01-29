@@ -4,39 +4,36 @@ defmodule MdTools.Doc.Svc.DocStageTest do
   alias MdTools.Doc.Svc.DocStage
   alias MdTools.Util.Queue
 
-  @dir "/tmp/test_dir"
+  import MdTools.Util.Test
+
+  @dir MdTools.Util.Test.base_dir()
 
   describe "start_link/1" do
     test "starts the GenServer successfully" do
       setup()
       assert {:ok, _pid} = DocStage.start_link(base_dir: @dir)
-      teardown()
     end
 
     test "with start_supervised" do
       setup()
       assert {:ok, _pid} = start_supervised({DocStage, [base_dir: @dir]})
-      teardown()
     end
 
     test "with start_supervised!" do
       setup()
       assert start_supervised!({DocStage, [base_dir: @dir]})
-      teardown()
     end
 
     test "registered process name" do
       setup()
       start_supervised({DocStage, [base_dir: @dir]})
       assert Process.whereis(:doc_stage)
-      teardown()
     end
 
     test "with no arguments" do
       setup()
       start_supervised({DocStage, []})
       assert Process.whereis(:doc_stage)
-      teardown()
     end
   end
 
@@ -75,7 +72,6 @@ defmodule MdTools.Doc.Svc.DocStageTest do
       DocStage.upsert_file("#{@dir}/test2.md")
       doclist = DocStage.event_queue()
       assert Queue.len(doclist) == 2
-      teardown()
     end
 
     test "insert existing filepath" do
@@ -84,7 +80,6 @@ defmodule MdTools.Doc.Svc.DocStageTest do
       DocStage.upsert_file("#{@dir}/test1.md")
       doclist = DocStage.event_queue()
       assert Queue.len(doclist) == 1
-      teardown()
     end
   end
 
@@ -95,7 +90,6 @@ defmodule MdTools.Doc.Svc.DocStageTest do
       DocStage.delete_file("#{@dir}/test2.md")
       doclist = DocStage.event_queue()
       assert Queue.len(doclist) == 2
-      teardown()
     end
 
     test "delete existing filepath" do
@@ -104,9 +98,7 @@ defmodule MdTools.Doc.Svc.DocStageTest do
       DocStage.delete_file("#{@dir}/test1.md")
       doclist = DocStage.event_queue()
       assert Queue.len(doclist) == 1
-      teardown()
     end
-
   end
 
   describe "#handle_demand/2" do
@@ -116,18 +108,23 @@ defmodule MdTools.Doc.Svc.DocStageTest do
       {:noreply, val, state} = DocStage.handle_demand(1, DocStage.state())
       assert length(val) == 1
       assert Queue.len(state.event_queue) == 0
-      teardown()
     end
   end
 
-  # ----- helpers
+  describe "stream" do
+    test "data from test dir" do
+      setup()
+      start_supervised({DocStage, [base_dir: @dir]})
+      result = GenStage.stream([:doc_stage]) |> Enum.take(1)
+      assert result
+    end
 
-  def setup do
-    File.mkdir_p(@dir)
-    File.write("#{@dir}/test1.md", "TestData")
+    test "data from org dir" do
+      setup()
+      start_supervised({DocStage, []})
+      result = GenStage.stream([:doc_stage]) |> Enum.take(1)
+      assert result
+    end
   end
 
-  def teardown do
-    File.rm_rf(@dir)
-  end
 end

@@ -3,7 +3,7 @@ defmodule MdTools.Doc.Svc.Watcher do
   use GenServer
 
   alias MdTools.Util
-  alias MdTools.Doc.Svc.Stage
+  alias MdTools.Doc.Svc.DocStage
 
 
   @moduledoc """
@@ -33,7 +33,7 @@ defmodule MdTools.Doc.Svc.Watcher do
   def handle_info({:file_event, _pid, {path, [:modified, :closed]}}, state) do
     if String.ends_with?(path, ".md") do
       IO.puts("Modified: #{path}")
-      Stage.upsert_file(path)
+      DocStage.upsert_file(path)
     end
     {:noreply, state}
   end
@@ -41,7 +41,7 @@ defmodule MdTools.Doc.Svc.Watcher do
   def handle_info({:file_event, _pid, {path, [:deleted]}}, state) do
     if String.ends_with?(path, ".md") do
       IO.puts("Deleted: #{path}")
-      Stage.delete_file(path)
+      DocStage.delete_file(path)
     end
     {:noreply, state}
   end
