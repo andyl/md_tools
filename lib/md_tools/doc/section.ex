@@ -1,21 +1,21 @@
-defmodule MdTools.Doc.Text do
+defmodule MdTools.Doc.Section do
 
   @moduledoc """
   Chunk markdown text.
-
-  Chunk Fields:
-  - doctitle
-  - sectitle
-  - body
-  - filepath
-  - startline
-  - uuid
-  - updated
-  - filehash
-  - bodyhash
   """
 
   alias Uniq.UUID
+  alias MdTools.Doc.Section
+
+  defstruct doctitle: "",
+            sectitle: "",
+            filepath: "",
+            startline: 0,
+            body:     "",
+            uuid:     "",
+            updated:  "",
+            filehash: "",
+            bodyhash: ""
 
   @doc """
   Ingest a markdown document.
@@ -42,19 +42,19 @@ defmodule MdTools.Doc.Text do
   end
 
   defp new_doc(args) do
-    %{filepath: "", line_count: 1, doc_title: "", sections: []}
+    %{filepath: "", linecount: 1, doctitle: "", sections: []}
     |> Map.merge(args)
   end
 
   defp new_section do
-    %{section_title: "", body: "", start_line: 0}
+    %Section{sectitle: "", body: "", startline: 0}
   end
 
   defp to_list(data) do
     merge_data = %{
       filepath: data.filepath,
       filehash: data.filehash,
-      doc_title: data.doc_title
+      doctitle: data.doctitle
     }
     data.sections
     |> Enum.map(&(Map.merge(&1, merge_data)))
@@ -64,80 +64,80 @@ defmodule MdTools.Doc.Text do
     new_data =
       data
       |> add_section()
-      |> set_start_line(data.line_count)
+      |> set_startline(data.linecount)
 
     proc_line(line, new_data)
   end
 
   defp proc_line(line, data) do
-    proc_line(line, data, has_section_title?(line))
+    proc_line(line, data, has_sectitle?(line))
   end
 
   # has section title
   defp proc_line(line, data, true) do
     data
-    |> increment_line_count()
+    |> increment_linecount()
     |> add_section()
-    |> set_start_line(data.line_count)
-    |> set_section_title(line)
+    |> set_startline(data.linecount)
+    |> set_sectitle(line)
     |> append_body(line)
   end
 
   # does not have section title
   defp proc_line(line, data, false) do
     data
-    |> increment_line_count()
-    |> set_doc_title(line)
+    |> increment_linecount()
+    |> set_doctitle(line)
     |> append_body(line)
   end
 
-  defp has_doc_title?(line) do
+  defp has_doctitle?(line) do
     line |> String.starts_with?("# ")
   end
 
-  defp has_section_title?(line) do
+  defp has_sectitle?(line) do
     line |> String.starts_with?("## ")
   end
 
-  defp set_doc_title(data = %{doc_title: ""}, line) do
-    set_doc_title(data, line, has_doc_title?(line))
+  defp set_doctitle(data = %{doctitle: ""}, line) do
+    set_doctitle(data, line, has_doctitle?(line))
   end
 
-  defp set_doc_title(data, _line) do
+  defp set_doctitle(data, _line) do
     data
   end
 
-  defp set_doc_title(data, line, true) do
+  defp set_doctitle(data, line, true) do
     title = line |> String.trim_leading("# ") |> String.trim()
 
     data
-    |> Map.merge(%{doc_title: title})
+    |> Map.merge(%{doctitle: title})
   end
 
-  defp set_doc_title(data, _line, _false) do
+  defp set_doctitle(data, _line, _false) do
     data
   end
 
-  defp set_section_title(data, line) do
-    set_section_title(data, line, has_section_title?(line))
+  defp set_sectitle(data, line) do
+    set_sectitle(data, line, has_sectitle?(line))
   end
 
-  defp set_section_title(data, line, true) do
+  defp set_sectitle(data, line, true) do
     section = line |> String.trim_leading("## ") |> String.trim()
 
     data
-    |> update_last_section(%{section_title: section})
+    |> update_last_section(%{sectitle: section})
   end
 
-  defp set_section_title(data, _line, _false) do
+  defp set_sectitle(data, _line, _false) do
     data
   end
 
-  defp increment_line_count(data) do
-    current = data.line_count
+  defp increment_linecount(data) do
+    current = data.linecount
 
     data
-    |> Map.merge(%{line_count: current + 1})
+    |> Map.merge(%{linecount: current + 1})
   end
 
   # defp set_filepath(data, filepath) do
@@ -150,9 +150,9 @@ defmodule MdTools.Doc.Text do
     |> Map.merge(%{sections: old_list ++ [new_section()]})
   end
 
-  defp set_start_line(data, start_line) do
+  defp set_startline(data, startline) do
     data
-    |> update_last_section(%{start_line: start_line})
+    |> update_last_section(%{startline: startline})
   end
 
   defp append_body(data, line) do
