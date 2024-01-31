@@ -1,7 +1,14 @@
-defmodule MdTools.Fts.Db do
+defmodule MdTools.SearchFts.Db do
+
   @moduledoc "Sqlite full-text-search operations."
 
   alias Exqlite.Sqlite3
+  alias MdTools.Util
+  alias MdTools.Doc.Section
+
+  def open do
+    open(":memory:")
+  end
 
   def open(":memory:") do
     {:ok, conn} = Sqlite3.open(":memory:")
@@ -16,11 +23,17 @@ defmodule MdTools.Fts.Db do
   end
 
   def migrate(conn) do
-    cmd =
-      "CREATE VIRTUAL TABLE IF NOT EXISTS sections USING fts5(filepath, doctitle, sectitle, body, startline);"
-
-    {:ok, statement} = Sqlite3.prepare(conn, cmd)
-    :done = Sqlite3.step(conn, statement)
+    [
+      Util.DbFts.create_data_table(%Section{}, "sections"),
+      Util.DbFts.create_fts_table("sections"),
+      Util.DbFts.create_insert_trigger("sections"),
+      Util.DbFts.create_update_trigger("sections"),
+      Util.DbFts.create_delete_trigger("sections"),
+    ]
+    |> Enum.each(fn cmd ->
+      {:ok, statement} = Sqlite3.prepare(conn, cmd)
+      :done = Sqlite3.step(conn, statement)
+    end)
     conn
   end
 
@@ -36,11 +49,8 @@ defmodule MdTools.Fts.Db do
     conn
   end
 
-  def load_row(conn, data) do
-    values = gen_values(data)
-
-    cmd =
-      "INSERT INTO sections (filepath, doctitle, sectitle, body, startline) VALUES (#{values});"
+  def load_row(conn, %Section{} = data) do
+    cmd = MdTools.Util.DbFts.insert_data_row("sections", data)
 
     statement =
       case Sqlite3.prepare(conn, cmd) do
@@ -49,22 +59,27 @@ defmodule MdTools.Fts.Db do
 
         {:error, msg} ->
           IO.inspect(msg)
-          IO.inspect(values)
+          IO.inspect(cmd)
           :error
       end
 
     :done = Sqlite3.step(conn, statement)
+    Sqlite3.release(conn, statement)
     conn
   end
 
-  def gen_values(data) do
-    cleanbody = data.body |> String.replace("'", "")
-
-    [data.filepath, data.doc_title, data.section_title, cleanbody, data.startline]
+  def select_all(conn) do
+    cmd = "SELECT * FROM sections;"
+    {:ok, statement} = Exqlite.Sqlite3.prepare(conn, cmd)
+    gen_result(conn, statement, [], Sqlite3.step(conn, statement))
   end
 
   def search(conn, query) do
-    cmd = "SELECT * FROM sections WHERE sections MATCH '#{query}' ORDER BY rank;"
+    cmd = """
+    SELECT * FROM sections
+    WHERE ROWID IN
+    (SELECT ROWID FROM sections_fts WHERE sections_fts MATCH '#{query}' ORDER BY rank);
+    """
     {:ok, statement} = Exqlite.Sqlite3.prepare(conn, cmd)
     gen_result(conn, statement, [], Sqlite3.step(conn, statement))
   end

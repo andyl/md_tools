@@ -3,7 +3,7 @@ defmodule MdTools.Fts.Svc.Httpd.Router do
 
   use Plug.Router, init_mode: :runtime
 
-  alias MdTools.Fts.Svc.Manager
+  # alias MdTools.Fts.Svc.Manager
 
   require Logger
 
@@ -31,26 +31,27 @@ defmodule MdTools.Fts.Svc.Httpd.Router do
     send_resp(conn, 404, "NOT FOUND")
   end
 
-  defp delete_body(list) do
-    delete_at(list, 3)
-  end
+  # defp delete_body(list) do
+  #   delete_at(list, 3)
+  # end
 
-  defp delete_at(list, index) do
-    list
-    |> Enum.with_index()
-    |> Enum.reject(fn {_, idx} -> idx == index end)
-    |> Enum.map(fn {elem, _} -> elem end)
-  end
+  # defp delete_at(list, index) do
+  #   list
+  #   |> Enum.with_index()
+  #   |> Enum.reject(fn {_, idx} -> idx == index end)
+  #   |> Enum.map(fn {elem, _} -> elem end)
+  # end
 
   defp gen_response(query) do
-    clean_query =
-      query
-      |> String.replace("\"", "")
-      |> String.replace("'", "")
-      |> String.replace("\\", "")
-
-    Manager.search(clean_query)
-    |> Enum.map(&delete_body(&1))
-    |> Jason.encode!()
+    # clean_query =
+    #   query
+    #   |> String.replace("\"", "")
+    #   |> String.replace("'", "")
+    #   |> String.replace("\\", "")
+    #
+    # Manager.search(clean_query)
+    # |> Enum.map(&delete_body(&1))
+    # |> Jason.encode!()
+    query
   end
 end

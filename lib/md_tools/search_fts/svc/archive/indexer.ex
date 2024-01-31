@@ -17,7 +17,7 @@ defmodule MdTools.Fts.Svc.Indexer do
 
   use GenServer
 
-  alias MdTools.Fts.Svc.Manager
+  # alias MdTools.Fts.Svc.Manager
 
   @delay 2000
 
@@ -72,7 +72,7 @@ defmodule MdTools.Fts.Svc.Indexer do
 
   defp exec_rebuild do
     IO.puts("Rebuilding FTS Index")
-    Manager.reload()
+    # Manager.reload()
   end
 
   defp time_now() do

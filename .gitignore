@@ -3,6 +3,7 @@
 /deps/
 /doc/
 /.fetch
+/.neovim
 /data/.md_tools/
 erl_crash.dump
 *.ez

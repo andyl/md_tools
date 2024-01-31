@@ -67,7 +67,4 @@ defmodule MdTools.Cache.Svc.JsonStageTest do
     end
   end
 
-  # describe "stream" do
-  # end
-
 end

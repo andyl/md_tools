@@ -7,15 +7,15 @@ defmodule MdTools.Doc.Section do
   alias Uniq.UUID
   alias MdTools.Doc.Section
 
-  defstruct doctitle: "",
-            sectitle: "",
-            filepath: "",
+  defstruct doctitle: "TBD",
+            sectitle: "TBD",
+            filepath: "TBD",
             startline: 0,
-            body:     "",
-            uuid:     "",
-            updated:  "",
-            filehash: "",
-            bodyhash: ""
+            body:     "TBD",
+            uuid:     "TBD",
+            updated:  "TBD",
+            filehash: "TBD",
+            bodyhash: "TBD"
 
   @doc """
   Ingest a markdown document.
