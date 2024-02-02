@@ -16,8 +16,7 @@ defmodule MdTools.Doc.Dir do
   end
 
   defp process_file(file) do
-    # MdTools.Doc.File.ingest(file)
-    file
+    MdTools.Doc.File.ingest(file)
   end
 
   defp list_all_files(base_path) do
