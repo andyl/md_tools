@@ -1,4 +1,4 @@
-defmodule MdTools.Cache.Svc.Supervisor do
+defmodule MdTools.SearchFts.Svc.Supervisor do
 
   @moduledoc false
 
@@ -12,7 +12,10 @@ defmodule MdTools.Cache.Svc.Supervisor do
   def init(_init_arg) do
     if Application.get_env(:md_tools, :fts_server) do
       children = [
-         MdTools.Cache.Svc.JsonStage
+        {MdTools.Fts.Svc.Watcher, [dirs: ["/home/aleak/util/org"]]},
+         MdTools.Fts.Svc.Indexer,
+         MdTools.Fts.Svc.Manager,
+         MdTools.Fts.Svc.Httpd.Server,
       ]
 
       Supervisor.init(children, strategy: :one_for_one)

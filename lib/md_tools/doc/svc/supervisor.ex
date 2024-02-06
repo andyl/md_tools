@@ -15,7 +15,7 @@ defmodule MdTools.Doc.Svc.Supervisor do
     if Application.get_env(:md_tools, :fts_server) do
       children = [
         {MdTools.Doc.Svc.Watcher, [base_dir: @dir]},
-        {MdTools.Doc.Svc.Stage, [base_dir: @dir]}
+        {MdTools.Doc.Svc.DocStage, [base_dir: @dir]}
       ]
 
       Supervisor.init(children, strategy: :one_for_one)
